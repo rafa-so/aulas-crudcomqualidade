@@ -1,0 +1,24 @@
+{
+  "name": "aulas-crudcomqualidade",
+  "version": "1.0.0",
+  "description": "projeto do crud com qualidade",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./core/crud.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafa-so/aulas-crudcomqualidade.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rafa-so/aulas-crudcomqualidade/issues"
+  },
+  "homepage": "https://github.com/rafa-so/aulas-crudcomqualidade#readme",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
