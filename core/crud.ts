@@ -54,6 +54,22 @@ function update(id: String, partialTodo: Partial<Todo>) {
     return updatedTodo;
 }
 
+function deleteById(id: string) {
+    const todos = read();
+
+    const todosWithoutOne = todos.filter((todo) => {
+        if (id === todo.id) {
+            return false;
+        }
+
+        return true;
+    });
+
+    fs.writeFileSync(DB_FILE_PATH, JSON.stringify({
+        todos: todosWithoutOne
+    }, null, 2));
+}
+
 function CLEAR_DB() {
     fs.writeFileSync(DB_FILE_PATH, "");
 }
@@ -62,8 +78,12 @@ CLEAR_DB();
 console.log(create("Primeira TODO"));
 console.log(create("Segunda TODO"));
 console.log(read());
+const fourth = create("Fouth TODO")
 const terceitaTODO = create("Terceira TODO");
 console.log(read());
 console.log(update(terceitaTODO.id, {
     content: "bla bla"
 }))
+
+deleteById(fourth.id);
+console.log(read());
