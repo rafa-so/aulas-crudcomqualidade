@@ -1,89 +1,109 @@
 import fs from "fs";
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 
-const DB_FILE_PATH = './core/db';
+const DB_FILE_PATH = "./core/db";
 
 interface Todo {
-    id: string,
-    date: string;
-    content: string;
-    done: boolean;
+  id: string;
+  date: string;
+  content: string;
+  done: boolean;
 }
 
 function create(content: string): Todo {
-    const todo: Todo = {
-        id: uuid(),
-        date: new Date().toISOString(),
-        content: content,
-        done: false,
+  const todo: Todo = {
+    id: uuid(),
+    date: new Date().toISOString(),
+    content: content,
+    done: false,
+  };
+
+  const todos: Array<Todo> = [...read(), todo];
+
+  fs.writeFileSync(
+    DB_FILE_PATH,
+    JSON.stringify(
+      {
+        todos,
+      },
+      null,
+      2
+    )
+  );
+  return todo;
+}
+
+export function read(): Array<Todo> {
+  const dbString = fs.readFileSync(DB_FILE_PATH, "utf-8");
+  const db = JSON.parse(dbString || "{}");
+
+  if (!db.todos) return [];
+  return db.todos;
+}
+
+function update(id: string, partialTodo: Partial<Todo>) {
+  let updatedTodo;
+  const todos = read();
+  todos.forEach((currentTodo) => {
+    const isToUpdate = currentTodo.id === id;
+    if (isToUpdate) {
+      updatedTodo = Object.assign(currentTodo, partialTodo);
     }
+  });
 
-    const todos: Array<Todo> = [
-        ...read(),
-        todo,
-    ]
+  fs.writeFileSync(
+    DB_FILE_PATH,
+    JSON.stringify(
+      {
+        todos,
+      },
+      null,
+      2
+    )
+  );
 
-    fs.writeFileSync(DB_FILE_PATH, JSON.stringify({
-        todos
-    }, null, 2));
-    return todo;
-}
-
-function read(): Array<Todo> {
-    const dbString = fs.readFileSync(DB_FILE_PATH, "utf-8");
-    const db = JSON.parse(dbString || '{}');
-
-    if (!db.todos) return [];
-    return db.todos;
-}
-
-function update(id: String, partialTodo: Partial<Todo>) {
-    let updatedTodo;
-    const todos = read();
-    todos.forEach((currentTodo) => {
-        const isToUpdate = currentTodo.id === id
-        if (isToUpdate) {
-            updatedTodo = Object.assign(currentTodo, partialTodo);
-        }
-    });
-
-    fs.writeFileSync(DB_FILE_PATH, JSON.stringify({
-        todos
-    }, null, 2));
-
-    return updatedTodo;
+  return updatedTodo;
 }
 
 function deleteById(id: string) {
-    const todos = read();
+  const todos = read();
 
-    const todosWithoutOne = todos.filter((todo) => {
-        if (id === todo.id) {
-            return false;
-        }
+  const todosWithoutOne = todos.filter((todo) => {
+    if (id === todo.id) {
+      return false;
+    }
 
-        return true;
-    });
+    return true;
+  });
 
-    fs.writeFileSync(DB_FILE_PATH, JSON.stringify({
-        todos: todosWithoutOne
-    }, null, 2));
+  fs.writeFileSync(
+    DB_FILE_PATH,
+    JSON.stringify(
+      {
+        todos: todosWithoutOne,
+      },
+      null,
+      2
+    )
+  );
 }
 
 function CLEAR_DB() {
-    fs.writeFileSync(DB_FILE_PATH, "");
+  fs.writeFileSync(DB_FILE_PATH, "");
 }
 
-CLEAR_DB();
-console.log(create("Primeira TODO"));
-console.log(create("Segunda TODO"));
-console.log(read());
-const fourth = create("Fouth TODO")
-const terceitaTODO = create("Terceira TODO");
-console.log(read());
-console.log(update(terceitaTODO.id, {
-    content: "bla bla"
-}))
+// CLEAR_DB();
+// console.log(create("Primeira TODO"));
+// console.log(create("Segunda TODO"));
+// console.log(read());
+// const fourth = create("Fouth TODO");
+// const terceitaTODO = create("Terceira TODO");
+// console.log(read());
+// console.log(
+//   update(terceitaTODO.id, {
+//     content: "bla bla",
+//   })
+// );
 
-deleteById(fourth.id);
-console.log(read());
+// deleteById(fourth.id);
+// console.log(read());
