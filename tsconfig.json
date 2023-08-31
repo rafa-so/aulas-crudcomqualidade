@@ -29,7 +29,7 @@
       ],
       "@server/*": [
         "src/server/*"
-      ]
+      ],
     }
   },
   "include": [

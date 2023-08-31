@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fs from "fs";
 import { v4 as uuid } from "uuid";
 
@@ -92,18 +93,6 @@ function CLEAR_DB() {
   fs.writeFileSync(DB_FILE_PATH, "");
 }
 
-// CLEAR_DB();
-// console.log(create("Primeira TODO"));
-// console.log(create("Segunda TODO"));
-// console.log(read());
-// const fourth = create("Fouth TODO");
-// const terceitaTODO = create("Terceira TODO");
-// console.log(read());
-// console.log(
-//   update(terceitaTODO.id, {
-//     content: "bla bla",
-//   })
-// );
-
-// deleteById(fourth.id);
-// console.log(read());
+CLEAR_DB();
+console.log(create("Primeira TODO"));
+console.log(create("Segunda TODO"));
