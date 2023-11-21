@@ -1,10 +1,11 @@
+import { read } from "@db-crud-todo";
 import { NextApiRequest, NextApiResponse } from "next";
 
-async function get(request: NextApiRequest, response: NextApiResponse) {
-  return fetch("/api/todos").then(async (respostaDoServidor) => {
-    const todosString = await respostaDoServidor.text();
-    const todosFromServer = JSON.parse(todosString).todos;
-    return todosFromServer;
+async function get(_: NextApiRequest, response: NextApiResponse) {
+  const ALL_TODOS = read();
+
+  response.status(200).json({
+    todos: ALL_TODOS,
   });
 }
 
