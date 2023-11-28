@@ -96,3 +96,5 @@ function CLEAR_DB() {
 CLEAR_DB();
 console.log(create("Primeira TODO"));
 console.log(create("Segunda TODO"));
+console.log(create("Terceira TODO"));
+console.log(create("Quarta TODO"));
