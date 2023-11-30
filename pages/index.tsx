@@ -14,18 +14,26 @@ function HomePage() {
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
   const [todos, setTodos] = useState<HomeTodo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const hasMorePages = totalPages > page;
+  const hasNoTodos = todos.length === 0;
+  
 
   // Load infos onload
   useEffect(() => {
     setInitialLoadComplete(true);
 
     if (!initialLoadComplete) {
-      todoController.get({ page }).then(({ todos, pages }) => {
-        setTodos(todos);
-        setTotalPages(pages);
-      });
+      todoController
+        .get({ page })
+        .then(({ todos, pages }) => {
+          setTodos(todos);
+          setTotalPages(pages);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   }, []);
 
@@ -81,17 +89,21 @@ function HomePage() {
               );
             })}
 
-            {/* <tr>
-              <td colSpan={4} align="center" style={{ textAlign: "center" }}>
-                Carregando...
-              </td>
-            </tr>
+            {isLoading && (
+              <tr>
+                <td colSpan={4} align="center" style={{ textAlign: "center" }}>
+                  Carregando...
+                </td>
+              </tr>
+            )}
 
-            <tr>
-              <td colSpan={4} align="center">
-                Nenhum item encontrado
-              </td>
-          </tr> */}
+            {!isLoading && hasNoTodos && (
+              <tr>
+                <td colSpan={4} align="center">
+                  Nenhum item encontrado
+                </td>
+              </tr>
+            )}
 
             {hasMorePages && (
               <tr>
@@ -101,6 +113,7 @@ function HomePage() {
                     onClick={() => {
                       const nextPage = page + 1;
                       setPage(nextPage);
+                      setIsLoading(true);
 
                       todoController
                         .get({ page: nextPage })
@@ -109,6 +122,9 @@ function HomePage() {
                             return [...oldTodos, ...todos];
                           });
                           setTotalPages(pages);
+                        })
+                        .finally(() => {
+                          setIsLoading(false);
                         });
                     }}
                   >
