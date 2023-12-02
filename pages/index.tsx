@@ -15,10 +15,15 @@ function HomePage() {
   const [page, setPage] = useState(1);
   const [todos, setTodos] = useState<HomeTodo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("e");
+
+  const homeTodos = todoController.filterTodosByContent<HomeTodo>(
+    search,
+    todos
+  );
 
   const hasMorePages = totalPages > page;
-  const hasNoTodos = todos.length === 0;
-  
+  const hasNoTodos = homeTodos.length === 0;
 
   // Load infos onload
   useEffect(() => {
@@ -58,7 +63,13 @@ function HomePage() {
 
       <section>
         <form>
-          <input type="text" placeholder="Filtrar lista atual, ex: Dentista" />
+          <input
+            type="text"
+            placeholder="Filtrar lista atual, ex: Dentista"
+            onChange={function handleSearch(event) {
+              setSearch(event.target.value);
+            }}
+          />
         </form>
 
         <table border={1}>
@@ -74,7 +85,7 @@ function HomePage() {
           </thead>
 
           <tbody>
-            {todos.map((todo) => {
+            {homeTodos.map((todo) => {
               return (
                 <tr key={todo.id}>
                   <td>
