@@ -31,6 +31,14 @@ async function get(req: NextApiRequest, response: NextApiResponse) {
   });
 }
 
+async function create(req: NextApiRequest, res: NextApiResponse) {
+  const createdTodo = await todoRepository.createByContent(req.body.content);
+  res.status(201).json({
+    todo: createdTodo,
+  });
+}
+
 export const todoController = {
   get,
+  create,
 };
