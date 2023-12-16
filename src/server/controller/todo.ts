@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { todoRepository } from "@server/repository/todo";
+import { z } from "zod";
 
 async function get(req: NextApiRequest, response: NextApiResponse) {
   const query = req.query;
@@ -31,8 +32,23 @@ async function get(req: NextApiRequest, response: NextApiResponse) {
   });
 }
 
+const TodoCreateBodySchema = z.object({
+  content: z.string(),
+});
 async function create(req: NextApiRequest, res: NextApiResponse) {
-  const createdTodo = await todoRepository.createByContent(req.body.content);
+  const body = TodoCreateBodySchema.safeParse(req.body);
+
+  if (!body.success) {
+    res.status(400).json({
+      error: {
+        message: "You need to provide a content to create a TODO",
+        description: body.error.issues,
+      },
+    });
+    return;
+  }
+
+  const createdTodo = await todoRepository.createByContent(body.data.content);
   res.status(201).json({
     todo: createdTodo,
   });
