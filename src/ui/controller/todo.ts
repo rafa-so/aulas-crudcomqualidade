@@ -23,7 +23,30 @@ function filterTodosByContent<Todo>(
   });
 }
 
+interface TodoControllerCreateParams {
+  content?: string;
+  onError: () => void;
+  onSuccess: (todo: any) => void;
+}
+function create({ content, onSuccess, onError }: TodoControllerCreateParams) {
+  if (!content) {
+    onError();
+    return;
+  }
+
+  const todo = {
+    id: "123",
+    content,
+    date: new Date(),
+    done: false,
+  };
+
+  onSuccess(todo);
+  return;
+}
+
 export const todoController = {
   get,
   filterTodosByContent,
+  create,
 };
