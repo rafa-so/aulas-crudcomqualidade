@@ -61,9 +61,6 @@ function HomePage() {
                 setTodos((oldTodos) => {
                   return [todo, ...oldTodos];
                 });
-
-                // eslint-disable-next-line no-console
-                console.log("front", todos);
                 setNewTodoContent("");
               },
               onError() {
