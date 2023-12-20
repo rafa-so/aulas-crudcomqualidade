@@ -26,18 +26,23 @@ function filterTodosByContent<Todo>(
 
 interface TodoControllerCreateParams {
   content?: string;
-  onError: () => void;
+  onError: (message?: string) => void;
   onSuccess: (todo: Todo) => void;
 }
 function create({ content, onSuccess, onError }: TodoControllerCreateParams) {
   if (!content) {
-    onError();
+    onError("Você precisa de um conteúdo!!");
     return;
   }
 
-  todoRepository.createByContent(content).then((todo) => {
-    onSuccess(todo);
-  });
+  todoRepository
+    .createByContent(content)
+    .then((todo) => {
+      onSuccess(todo);
+    })
+    .catch(() => {
+      onError();
+    });
 
   return;
 }
