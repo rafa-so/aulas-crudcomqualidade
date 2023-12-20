@@ -1,3 +1,5 @@
+import { Todo } from "@ui/schema/todo";
+
 interface TodoRepositoryGetParams {
   page: number;
   limit: number;
@@ -31,22 +33,11 @@ export const todoRepository = {
   get,
 };
 
-// Model/Schema
-interface Todo {
-  id: string;
-  content: string;
-  date: Date;
-  done: boolean;
-}
-
-function parseTodosFromServer(responseBody: unknown): { 
+function parseTodosFromServer(responseBody: unknown): {
   total: number;
   pages: number;
-  todos: Array<Todos>;
+  todos: Array<Todo>;
 } {
-  // eslint-disable-next-line no-console
-  console.log("responseBOdy: ", responseBody);
-
   if (
     responseBody !== null &&
     typeof responseBody === "object" &&

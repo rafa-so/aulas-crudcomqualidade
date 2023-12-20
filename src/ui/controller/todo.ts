@@ -1,4 +1,5 @@
 import { todoRepository } from "@ui/repository/todo";
+import { Todo } from "@ui/schema/todo";
 
 interface TodoControllerGetParams {
   page: number;
@@ -26,7 +27,7 @@ function filterTodosByContent<Todo>(
 interface TodoControllerCreateParams {
   content?: string;
   onError: () => void;
-  onSuccess: (todo: any) => void;
+  onSuccess: (todo: Todo) => void;
 }
 function create({ content, onSuccess, onError }: TodoControllerCreateParams) {
   if (!content) {
@@ -37,7 +38,7 @@ function create({ content, onSuccess, onError }: TodoControllerCreateParams) {
   const todo = {
     id: "123",
     content,
-    date: new Date(),
+    date: new Date().toISOString(),
     done: false,
   };
 
