@@ -42,7 +42,7 @@ export function read(): Array<Todo> {
   return db.todos;
 }
 
-function update(id: string, partialTodo: Partial<Todo>) {
+export function update(id: string, partialTodo: Partial<Todo>) {
   let updatedTodo;
   const todos = read();
   todos.forEach((currentTodo) => {
@@ -62,6 +62,13 @@ function update(id: string, partialTodo: Partial<Todo>) {
       2
     )
   );
+
+  console.info("[ DEBUG > CRUD > UPDATE ]: ", {
+    params: { id, partialTodo },
+    response: {
+      updatedTodo,
+    },
+  });
 
   return updatedTodo;
 }
